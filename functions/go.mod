@@ -1,3 +1,3 @@
-module github.com/go-pkg/functions
+module github.com/macdiss/go-pkg/functions
 
 go 1.20
