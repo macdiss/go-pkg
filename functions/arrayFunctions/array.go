@@ -1,5 +1,7 @@
 package arrayFunctions
 
+import "reflect"
+
 func StringArrayChunk(strArray []string, size int) [][]string {
 	result := [][]string{}
 
@@ -63,4 +65,38 @@ func Int32ArrayToInt64Array(a []int32) []int64 {
 	}
 
 	return res
+}
+
+func InArray(array interface{}, v interface{}) bool {
+	if reflect.Slice != reflect.TypeOf(array).Kind() {
+		panic("value of 'array' must be a slice")
+	}
+	a := reflect.ValueOf(array)
+	for i := 0; i < a.Len(); i++ {
+		if reflect.DeepEqual(v, a.Index(i).Interface()) == true {
+			return true
+		}
+	}
+
+	return false
+}
+
+func ArrayChunk(array interface{}, size int) [][]interface{} {
+	if reflect.Slice != reflect.TypeOf(array).Kind() {
+		panic("value of 'array' must be a slice")
+	}
+	a := reflect.ValueOf(array)
+	result := [][]any{}
+	j := 0
+	for i := 0; i < a.Len(); i++ {
+		if j == len(result) {
+			result = append(result, []any{})
+		}
+		result[j] = append(result[j], a.Index(i).Interface())
+		if size == len(result[j]) {
+			j++
+		}
+	}
+
+	return result
 }
