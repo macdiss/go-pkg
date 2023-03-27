@@ -100,3 +100,23 @@ func ArrayChunk(array interface{}, size int) [][]interface{} {
 
 	return result
 }
+
+func ArrayUnique(array interface{}) []interface{} {
+	res := []any{}
+	if reflect.Slice != reflect.TypeOf(array).Kind() {
+		panic("value of 'array' must be a slice")
+	}
+	a := reflect.ValueOf(array)
+CO:
+	for i := 0; i < a.Len(); i++ {
+		v := a.Index(i).Interface()
+		for _, r := range res {
+			if v == r {
+				continue CO
+			}
+		}
+		res = append(res, v)
+	}
+
+	return res
+}
